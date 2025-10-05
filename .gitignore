@@ -1,0 +1,7 @@
+# Ignore everything
+**
+
+# Allow only these files (wherever they appear)
+!.gitignore
+!index.html
+!document.pdf.enc
