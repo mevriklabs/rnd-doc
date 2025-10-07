@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mevrik Innovation Hub</title>
+    <title>Protected Document Viewer</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <style>
@@ -96,7 +96,7 @@
       button {
         width: 100%;
         padding: 16px;
-        background: linear-gradient(135deg, #353538 0%, #1b181e 100%);
+        background:linear-gradient(135deg, #353538 0%, #1b181e 100%);
         color: white;
         border: none;
         border-radius: 10px;
@@ -230,6 +230,8 @@
         min-height: 100vh;
       }
 
+      
+
       .viewer-header {
         position: sticky;
         top: 0;
@@ -268,17 +270,9 @@
         transition: background 0.2s ease;
         width: auto;
       }
-
+    
       .control-btn:hover {
         background: #5a6778;
-      }
-      
-      /* New style for the Exit button to make it stand out a bit */
-      #exit-btn {
-          background: #c53030; /* A red color for danger/exit */
-      }
-      #exit-btn:hover {
-          background: #e53e3e;
       }
 
       .page-info {
@@ -300,7 +294,7 @@
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
         background: white;
         max-width: 100%;
-      }
+      } 
       .footer {
         background: #2d3748;
         padding: 16px 24px;
@@ -311,6 +305,7 @@
     </style>
   </head>
   <body>
+    <!-- Login Screen -->
     <div id="login" class="login-overlay">
       <div class="login-container">
         <div class="lock-icon">
@@ -337,11 +332,13 @@
       </div>
     </div>
 
+    <!-- File Selection Screen -->
     <div id="file-selection" class="file-selection">
       <h2>Please Select a Document to View</h2>
       <div class="file-list" id="file-list"></div>
     </div>
 
+    <!-- Loading Screen -->
     <div id="loading" class="loading-overlay">
       <div class="loading-content">
         <div class="spinner"></div>
@@ -349,6 +346,7 @@
       </div>
     </div>
 
+    <!-- Viewer -->
     <div id="viewer" class="viewer-wrapper">
       <div class="viewer-header">
         <div class="viewer-title" id="viewer-title">📄 Mevrik Viewer</div>
@@ -360,12 +358,14 @@
           <button class="control-btn" id="zoom-out">Zoom −</button>
           <button class="control-btn" id="zoom-in">Zoom +</button>
           <button class="control-btn" id="fit-width">Fit Width</button>
-         
-          </div>
+        </div>
       </div>
-      <div id="pdf-container" class="pdf-container"></div>
+      <div id="pdf-container" class="pdf-container">
+        
+      </div>
       <div class="footer">🔐 Protected Document Viewer — © Mevrik</div>
     </div>
+
 
     <script>
       const CONFIG = {
@@ -376,6 +376,7 @@
           { name: "Mevrik R&D Document on Genrative AI Implementaion", file: "Mevrik-R&D-Document-on-Genrative-AI-Implementaion.pdf.enc" },
           { name: "Mevrik R&D Document on Agentic CX AI Implementaion", file: "Mevrik-R&D-Document-on-Agentic-CX-AI-Implementaion.pdf.enc" },
           { name: "Development Documents", file: "document.pdf.enc" },
+          
         ],
       };
 
@@ -402,25 +403,13 @@
         errorMessage.classList.add("show");
         setTimeout(() => errorMessage.classList.remove("show"), 3000);
       }
-      
-      // Function to navigate back to file selection
+
       function showFileList() {
-        // Hide viewer and loading screen
-        viewerScreen.style.display = "none";
-        loadingScreen.style.display = "none";
-
-        // Reset PDF variables for memory management and cleanup
-        pdfDoc = null; 
-        pdfContainer.innerHTML = "";
-        scale = 1.5; // Reset zoom
-
-        // Show file selection screen
+        loginScreen.style.display = "none";
         fileSelection.style.display = "block";
 
         const list = document.getElementById("file-list");
-        // Only re-render the list if it's empty to save resources, though the original logic rendered it every time.
-        // I will keep the re-render for simplicity and consistency with the original structure.
-        list.innerHTML = ""; 
+        list.innerHTML = "";
         CONFIG.files.forEach((f) => {
           const div = document.createElement("div");
           div.className = "file-card";
@@ -429,7 +418,6 @@
           list.appendChild(div);
         });
       }
-
 
       async function loadPDF(fileInfo) {
         fileSelection.style.display = "none";
@@ -466,9 +454,6 @@
 
       async function renderAllPages() {
         pdfContainer.innerHTML = "";
-        // Reset page count info when re-rendering
-        document.getElementById("current-page").textContent = 1; 
-
         for (let i = 1; i <= pdfDoc.numPages; i++) {
           const page = await pdfDoc.getPage(i);
           const viewport = page.getViewport({ scale });
@@ -508,18 +493,11 @@
 
       document.getElementById("fit-width").addEventListener("click", async () => {
         const containerWidth = pdfContainer.offsetWidth - 40;
-        if (!pdfDoc) return; // Prevent error if not document is loaded
         const page = await pdfDoc.getPage(1);
         const viewport = page.getViewport({ scale: 1 });
         scale = containerWidth / viewport.width;
         renderAllPages();
       });
-
-      // ADDED: Event listener for the Exit button
-      document.getElementById("exit-btn").addEventListener("click", () => {
-        showFileList();
-      });
-      // END ADDED
     </script>
   </body>
 </html>
