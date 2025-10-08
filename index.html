@@ -229,6 +229,7 @@
         border-radius: 4px;
         cursor: pointer;
         font-size: 14px;
+        width: auto;
       }
 
       .control-btn:hover {
@@ -305,7 +306,7 @@
       <div class="viewer-header">
         <div class="viewer-title" id="viewer-title">📄 Mevrik Viewer</div>
         <div class="controls">
-          <button class="control-btn exit-btn" id="exit-btn">Exit</button>
+          
           <span class="page-info">
             Page <span id="current-page">1</span> of
             <span id="total-pages">-</span>
@@ -313,6 +314,7 @@
           <button class="control-btn" id="zoom-out">Zoom −</button>
           <button class="control-btn" id="zoom-in">Zoom +</button>
           <button class="control-btn" id="fit-width">Fit Width</button>
+          <button class="control-btn exit-btn" id="exit-btn">Exit</button>
         </div>
       </div>
       <div id="pdf-container" class="pdf-container"></div>
@@ -329,12 +331,17 @@
             file: "Mevrik-R&D-Document-on-Unified-CX-AI.pdf.enc",
           },
           {
-            name: "Development Documents (Google Drive)",
-            href: "https://drive.google.com/file/d/xyz123/view?usp=sharing",
+            name: "Mevrik R&D Document on Generative AI Implementation",
+            file: "Mevrik-R&D-Document-on-Genrative-AI-Implementaion.pdf.enc",
+          },
+          
+          {
+            name: "Mevrik R&D Document on Agentic CX AI Implementaion",
+            file: "Mevrik-R&D-Document-on-Agentic-CX-AI-Implementaion.pdf.enc",
           },
           {
-            name: "Mevrik GenAI Implementation",
-            file: "Mevrik-R&D-Document-on-Genrative-AI-Implementaion.pdf.enc",
+            name: "Development Documents",
+            href: "https://drive.google.com/drive/folders/1arNqMJfvPzU37RvdvYca9pAbnoeCocnD?usp=sharing",
           },
         ],
       };
