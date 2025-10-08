@@ -142,12 +142,29 @@
       }
 
       .file-list {
-        grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: repeat(5, 200px);
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(2, 200px);
+        gap: 1.5rem;
+        padding: 2rem;
+        justify-items: center;
+        align-items: center;
+      }
+
+      .file-item {
+        width: 100%;
+        height: 100%;
+        background: white;
+        border-radius: 12px;
+        padding: 1rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        cursor: pointer;
         display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
+        align-items: center;
         justify-content: center;
+        text-align: center;
+        font-weight: 500;
+        transition: all 0.2s;
       }
 
       .file-card {
@@ -299,7 +316,7 @@
 
     <!-- File Selection -->
     <div id="file-selection" class="file-selection">
-      <img "src="https://cdn.prod.website-files.com/62b2bfb8066ae01a203984c0/653dce99bdd0b1ea6c0d0c15_Type%3DLogo%2C%20Size%3D200%2C%20Color%3DPurple%20BG.svg"
+      <img width=240px; height="120px" "src="https://cdn.prod.website-files.com/62b2bfb8066ae01a203984c0/653dce99bdd0b1ea6c0d0c15_Type%3DLogo%2C%20Size%3D200%2C%20Color%3DPurple%20BG.svg"
             alt="Mevrik Logo"
           />
       <br>
@@ -334,7 +351,7 @@
           "18be59f72c23c94957077bd3d1ca4e05ddd4d89459fa6123809c64c70c4371fa",
         files: [
           {
-            name: "R&D Document on Unified CX AI",
+            name: "R&D Document on Mevrik Unified CX AI Platform",
             file: "Mevrik-R&D-Document-on-Unified-CX-AI.pdf.enc",
           },
           {
