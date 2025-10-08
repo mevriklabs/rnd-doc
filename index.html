@@ -49,9 +49,6 @@
         width: 120px;
         height: 120px;
         margin: 0 auto 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
       }
 
       .lock-icon img {
@@ -96,7 +93,7 @@
       button {
         width: 100%;
         padding: 16px;
-        background:linear-gradient(135deg, #353538 0%, #1b181e 100%);
+        background: linear-gradient(135deg, #353538 0%, #1b181e 100%);
         color: white;
         border: none;
         border-radius: 10px;
@@ -123,24 +120,10 @@
         margin-top: 16px;
         font-size: 14px;
         display: none;
-        animation: shake 0.4s ease;
       }
 
       .error-message.show {
         display: block;
-      }
-
-      @keyframes shake {
-        0%,
-        100% {
-          transform: translateX(0);
-        }
-        25% {
-          transform: translateX(-10px);
-        }
-        75% {
-          transform: translateX(10px);
-        }
       }
 
       /* File Selection Screen */
@@ -169,13 +152,13 @@
         background: #1b181e0d;
         border-radius: 12px;
         padding: 20px;
-        width: 200px;
-        cursor: pointer;
+        width: 220px;
         transition: all 0.3s ease;
+        text-align: center;
       }
 
       .file-card:hover {
-        background: #1b181e0d;
+        background: #ececec;
         transform: translateY(-4px);
       }
 
@@ -186,42 +169,24 @@
 
       .file-card p {
         font-size: 14px;
-        color: #1b1b1b;
+        color: #333;
+        margin-bottom: 12px;
       }
 
-      /* Loading Screen */
-      .loading-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(135deg, #fafafa 0%, #f1f1f1 100%);
-        display: none;
-        align-items: center;
-        justify-content: center;
-        z-index: 1000;
-      }
-
-      .loading-content {
-        text-align: center;
+      .link-btn {
+        display: inline-block;
+        margin-top: 6px;
+        padding: 8px 12px;
+        background: #353538;
         color: white;
+        border-radius: 6px;
+        font-size: 13px;
+        text-decoration: none;
+        transition: all 0.2s ease;
       }
 
-      .spinner {
-        width: 50px;
-        height: 50px;
-        border: 4px solid #1b181e0d;
-        border-top-color: white;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-        margin: 0 auto 20px;
-      }
-
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
+      .link-btn:hover {
+        background: #1b181e;
       }
 
       /* Viewer */
@@ -229,8 +194,6 @@
         display: none;
         min-height: 100vh;
       }
-
-      
 
       .viewer-header {
         position: sticky;
@@ -243,7 +206,6 @@
         align-items: center;
         flex-wrap: wrap;
         gap: 12px;
-        z-index: 100;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
       }
 
@@ -260,25 +222,25 @@
       }
 
       .control-btn {
-        padding: 5px 10px;
+        padding: 6px 10px;
         background: #4a5568;
         border: none;
         color: white;
         border-radius: 4px;
         cursor: pointer;
         font-size: 14px;
-        transition: background 0.2s ease;
-        width: auto;
       }
-    
+
       .control-btn:hover {
         background: #5a6778;
       }
 
-      .page-info {
-        color: #e2e8f0;
-        font-size: 14px;
-        padding: 0 8px;
+      .exit-btn {
+        background: #e53e3e;
+      }
+
+      .exit-btn:hover {
+        background: #c53030;
       }
 
       .pdf-container {
@@ -293,8 +255,8 @@
       .pdf-page {
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
         background: white;
-        max-width: 100%;
-      } 
+      }
+
       .footer {
         background: #2d3748;
         padding: 16px 24px;
@@ -305,7 +267,7 @@
     </style>
   </head>
   <body>
-    <!-- Login Screen -->
+    <!-- Login -->
     <div id="login" class="login-overlay">
       <div class="login-container">
         <div class="lock-icon">
@@ -332,18 +294,10 @@
       </div>
     </div>
 
-    <!-- File Selection Screen -->
+    <!-- File Selection -->
     <div id="file-selection" class="file-selection">
       <h2>Please Select a Document to View</h2>
       <div class="file-list" id="file-list"></div>
-    </div>
-
-    <!-- Loading Screen -->
-    <div id="loading" class="loading-overlay">
-      <div class="loading-content">
-        <div class="spinner"></div>
-        <p>Decrypting and loading document...</p>
-      </div>
     </div>
 
     <!-- Viewer -->
@@ -351,6 +305,7 @@
       <div class="viewer-header">
         <div class="viewer-title" id="viewer-title">📄 Mevrik Viewer</div>
         <div class="controls">
+          <button class="control-btn exit-btn" id="exit-btn">Exit</button>
           <span class="page-info">
             Page <span id="current-page">1</span> of
             <span id="total-pages">-</span>
@@ -360,23 +315,27 @@
           <button class="control-btn" id="fit-width">Fit Width</button>
         </div>
       </div>
-      <div id="pdf-container" class="pdf-container">
-        
-      </div>
+      <div id="pdf-container" class="pdf-container"></div>
       <div class="footer">🔐 Protected Document Viewer — © Mevrik</div>
     </div>
-
 
     <script>
       const CONFIG = {
         correctPasswordHash:
           "18be59f72c23c94957077bd3d1ca4e05ddd4d89459fa6123809c64c70c4371fa",
         files: [
-          { name: "Mevrik Unified CX AI RnD Document", file: "Mevrik-R&D-Document-on-Unified-CX-AI.pdf.enc" },
-          { name: "Mevrik R&D Document on Genrative AI Implementaion", file: "Mevrik-R&D-Document-on-Genrative-AI-Implementaion.pdf.enc" },
-          { name: "Mevrik R&D Document on Agentic CX AI Implementaion", file: "Mevrik-R&D-Document-on-Agentic-CX-AI-Implementaion.pdf.enc" },
-          { name: "Development Documents", file: "document.pdf.enc" },
-          
+          {
+            name: "Mevrik Unified CX AI RnD Document",
+            file: "Mevrik-R&D-Document-on-Unified-CX-AI.pdf.enc",
+          },
+          {
+            name: "Development Documents (Google Drive)",
+            href: "https://drive.google.com/file/d/xyz123/view?usp=sharing",
+          },
+          {
+            name: "Mevrik GenAI Implementation",
+            file: "Mevrik-R&D-Document-on-Genrative-AI-Implementaion.pdf.enc",
+          },
         ],
       };
 
@@ -390,7 +349,6 @@
       const loginScreen = document.getElementById("login");
       const fileSelection = document.getElementById("file-selection");
       const viewerScreen = document.getElementById("viewer");
-      const loadingScreen = document.getElementById("loading");
       const pdfContainer = document.getElementById("pdf-container");
       const errorMessage = document.getElementById("error-message");
 
@@ -407,22 +365,33 @@
       function showFileList() {
         loginScreen.style.display = "none";
         fileSelection.style.display = "block";
-
         const list = document.getElementById("file-list");
         list.innerHTML = "";
         CONFIG.files.forEach((f) => {
           const div = document.createElement("div");
           div.className = "file-card";
-          div.innerHTML = `<h3>${f.name}</h3><p>Encrypted PDF</p>`;
-          div.addEventListener("click", () => loadPDF(f));
+          if (f.href) {
+            div.innerHTML = `
+              <h3>${f.name}</h3>
+              <p>External Link</p>
+              <a href="${f.href}" target="_blank" class="link-btn">Open Link</a>
+            `;
+          } else {
+            div.innerHTML = `
+              <h3>${f.name}</h3>
+              <p>Encrypted PDF</p>
+              <button class="link-btn">View</button>
+            `;
+            div.querySelector("button").addEventListener("click", () => loadPDF(f));
+          }
           list.appendChild(div);
         });
       }
 
       async function loadPDF(fileInfo) {
         fileSelection.style.display = "none";
-        loadingScreen.style.display = "flex";
-
+        viewerScreen.style.display = "block";
+        pdfContainer.innerHTML = "Loading...";
         try {
           const res = await fetch(fileInfo.file);
           if (!res.ok) throw new Error("File not found");
@@ -434,21 +403,18 @@
 
           const binary = atob(decrypted);
           const bytes = new Uint8Array(binary.length);
-          for (let i = 0; i < binary.length; i++)
-            bytes[i] = binary.charCodeAt(i);
+          for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
 
           pdfDoc = await pdfjsLib.getDocument({ data: bytes }).promise;
           document.getElementById("total-pages").textContent = pdfDoc.numPages;
           document.getElementById("viewer-title").textContent =
             "📄 " + fileInfo.name;
-          viewerScreen.style.display = "block";
-          loadingScreen.style.display = "none";
           renderAllPages();
         } catch (err) {
           console.error(err);
-          loadingScreen.style.display = "none";
           showError("Failed to load or decrypt the file.");
           fileSelection.style.display = "block";
+          viewerScreen.style.display = "none";
         }
       }
 
@@ -497,6 +463,11 @@
         const viewport = page.getViewport({ scale: 1 });
         scale = containerWidth / viewport.width;
         renderAllPages();
+      });
+
+      document.getElementById("exit-btn").addEventListener("click", () => {
+        viewerScreen.style.display = "none";
+        fileSelection.style.display = "block";
       });
     </script>
   </body>
